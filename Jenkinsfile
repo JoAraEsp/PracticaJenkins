@@ -1,38 +1,26 @@
 pipeline {
-    agent any 
-
-    environment {
-        DOCKER_IMAGE = 'practica:latest'
-    }
+    agent any
 
     stages {
-        stage('Preparar') {
+        stage('Build and Run') {
             steps {
-               
-                checkout scm
-            }
-        }
-        stage('Build') {
-            steps {
-                echo 'Construyendo la imagen Docker...'
                 script {
-                   
-                    docker.build(env.DOCKER_IMAGE)
+                    // Usar docker-compose para construir y ejecutar el contenedor
+                    sh 'docker-compose up --build -d'
                 }
             }
         }
         stage('Test') {
             steps {
-                echo 'Ejecutando pruebas...'
-                
-                sh 'echo "Aquí van los comandos para ejecutar pruebas"'
+                // Ejecutar pruebas aquí, puedes hacer peticiones HTTP a tu API, por ejemplo
+                sh 'curl http://localhost:3000/api/v1/welcome'
             }
         }
-        stage('Deploy') {
+        stage('Cleanup') {
             steps {
-                echo 'Desplegando a producción...'
                 script {
-                    sh 'echo "Desplegar utilizando algún script o herramienta"'
+                    // Detener y remover los contenedores
+                    sh 'docker-compose down'
                 }
             }
         }
@@ -43,10 +31,11 @@ pipeline {
             echo 'Este mensaje siempre se ejecutará al final del pipeline.'
         }
         success {
-            echo 'El pipeline se ejecutó correctamente'
+            echo 'El pipeline se ejecutó correctamente!'
         }
         failure {
             echo 'El pipeline falló en algún paso.'
         }
     }
 }
+
