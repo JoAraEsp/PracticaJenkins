@@ -5,22 +5,22 @@ pipeline {
         stage('Build and Run') {
             steps {
                 script {
-                    // Usar docker-compose para construir y ejecutar el contenedor
-                    sh 'docker-compose up --build -d'
+                    // Usa 'docker compose' en lugar de 'docker-compose'
+                    sh 'docker compose up --build -d'
                 }
             }
         }
         stage('Test') {
             steps {
-                // Ejecutar pruebas aquí, puedes hacer peticiones HTTP a tu API, por ejemplo
-                sh 'curl http://localhost:3000/api/v1/welcome'
+                // Asumiendo que quieres hacer algún test, como un simple curl para verificar que el servidor responde.
+                sh 'curl -m 5 http://localhost:3000'
             }
         }
         stage('Cleanup') {
             steps {
                 script {
-                    // Detener y remover los contenedores
-                    sh 'docker-compose down'
+                    // Usa 'docker compose down' para limpiar después de los tests
+                    sh 'docker compose down'
                 }
             }
         }
@@ -38,4 +38,3 @@ pipeline {
         }
     }
 }
-
