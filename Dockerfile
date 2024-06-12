@@ -1,20 +1,8 @@
-# Imagen base
 FROM node:14
-
-# Directorio de trabajo dentro del contenedor
 WORKDIR /app
-
-# Copia el archivo package.json y package-lock.json
-COPY package*.json ./
-
-# Instala las dependencias
+COPY *.json ./
 RUN npm install
-
-# Copia todo el contenido local al directorio /app en el contenedor
+RUN npm install --save-dev mocha supertest
 COPY . .
-
-# Expone el puerto 3000
 EXPOSE 3000
-
-# Comando por defecto al iniciar el contenedor
-CMD ["node", "index.js"]
+CMD [ "node", "index.js"]
